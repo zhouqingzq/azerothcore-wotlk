@@ -1025,6 +1025,8 @@ void Player::setDeathState(DeathState s, bool /*despawn = false*/)
             return;
         }
 
+        SpellQueue.clear();
+
         // drunken state is cleared on death
         SetDrunkValue(0);
         // lost combo points at any target (targeted combo points clear in Unit::setDeathState)
