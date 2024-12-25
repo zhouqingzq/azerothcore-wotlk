@@ -915,10 +915,13 @@ class spell_gen_leeching_swarm_dmg : public SpellScript
     void HandleAfterHit()
     {
         if (Unit* caster = GetCaster())
-            if (GetHitDamage() > 0)
+            if (GetHitDamage() > 0 && Unit* target = GetTarget())
             {
-                int32 damage = GetHitDamage() * 2;
-                caster->CastCustomSpell(caster, SPELL_LEECHING_SWARM_HEAL, &damage, 0, 0, true);
+                int32 lifeLeeched = target->CountPctFromCurHealth(aurEff->GetAmount());
+                if (lifeLeeched < 250)
+                    lifeLeeched = 250;
+                heal = lifeLeeched * 2;
+                target->CastCustomSpell(caster, SPELL_LEECHING_SWARM_HEAL, &heal, 0, 0, true);
             }
     }
 
