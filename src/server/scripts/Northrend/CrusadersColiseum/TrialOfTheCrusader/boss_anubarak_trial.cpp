@@ -557,7 +557,7 @@ public:
 
         uint32 permafrostTimer;
 
-        void DamageTaken(Unit* attacker, uint32& damage, DamageEffectType, SpellSchoolMask) override
+        void DamageTaken(Unit*, uint32& damage, DamageEffectType, SpellSchoolMask) override
         {
             if (me->GetHealth() <= damage )
             {
@@ -914,15 +914,15 @@ class spell_gen_leeching_swarm_dmg : public SpellScript
 
     void HandleAfterHit()
     {
-        if (Unit* caster = GetCaster())
-            if (GetHitDamage() > 0 && Unit* target = GetTarget())
-            {
-                int32 lifeLeeched = target->CountPctFromCurHealth(aurEff->GetAmount());
-                if (lifeLeeched < 250)
-                    lifeLeeched = 250;
-                heal = lifeLeeched * 2;
-                target->CastCustomSpell(caster, SPELL_LEECHING_SWARM_HEAL, &heal, 0, 0, true);
-            }
+        Unit* caster = GetCaster();
+        Player* player = GetHitPlayer();
+        if (caster && player) {
+            int32 lifeLeeched = player->CountPctFromCurHealth(30);
+            if (lifeLeeched < 250)
+                lifeLeeched = 250;
+            int heal = lifeLeeched * 2;
+            player->CastCustomSpell(caster, SPELL_LEECHING_SWARM_HEAL, &heal, 0, 0, true);
+        }
     }
 
     void Register() override
