@@ -540,14 +540,14 @@ struct boss_jormungarAI : public ScriptedAI
         if (me->GetDisplayId() == _MODEL_STATIONARY )
         {
             me->SetAttackTime(BASE_ATTACK, 1500);
-            events.RescheduleEvent(EVENT_SPELL_SPRAY, 10s);
-            events.RescheduleEvent(EVENT_SPELL_SWEEP, 15s, 30s);
+            events.RescheduleEvent(EVENT_SPELL_SPRAY, 8s);
+            events.RescheduleEvent(EVENT_SPELL_SWEEP, 15s);
         }
         else
         {
             me->SetAttackTime(BASE_ATTACK, 2000);
-            events.RescheduleEvent(EVENT_SPELL_BITE, 10s);
-            events.RescheduleEvent(EVENT_SPELL_SPEW, 15s, 30s);
+            events.RescheduleEvent(EVENT_SPELL_BITE, 8s);
+            events.RescheduleEvent(EVENT_SPELL_SPEW, 15s);
             events.RescheduleEvent(EVENT_SPELL_SLIME_POOL, 15s);
         }
         if (!me->HasAura(SPELL_ENRAGE))
@@ -652,7 +652,7 @@ struct boss_jormungarAI : public ScriptedAI
             case EVENT_SPELL_SPRAY:
                 if (Unit* target = SelectTarget(SelectTargetMethod::Random, 0, 100.0f, true))
                     me->CastSpell(target, _SPELL_SPRAY, false);
-                events.Repeat(15s);
+                events.Repeat(18s);
                 break;
             case EVENT_SPELL_SWEEP:
                 me->CastSpell((Unit*)nullptr, SPELL_SWEEP_0, false);
@@ -661,16 +661,16 @@ struct boss_jormungarAI : public ScriptedAI
             case EVENT_SPELL_BITE:
                 if (Unit* victim = me->GetVictim())
                     me->CastSpell(victim, _SPELL_BITE, false);
-                events.Repeat(15s);
+                events.Repeat(18s);
                 break;
             case EVENT_SPELL_SPEW:
                 me->CastSpell(me->GetVictim(), _SPELL_SPEW, false);
-                events.Repeat(15s, 30s);
+                events.Repeat(15s);
                 break;
             case EVENT_SPELL_SLIME_POOL:
                 if (Creature* c = me->SummonCreature(NPC_SLIME_POOL, *me, TEMPSUMMON_TIMED_DESPAWN, 30000))
                     c->CastSpell(c, SPELL_SLIME_POOL_EFFECT, true);
-                events.Repeat(30s);
+                events.Repeat(15s);
                 break;
         }
 
