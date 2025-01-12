@@ -127,6 +127,7 @@ enum AnubSpells
     SPELL_SHADOW_STRIKE                         = 66134,
     SPELL_SUBMERGE_EFFECT                       = 53421,
     SPELL_EMERGE_EFFECT                         = 66947,
+    SPELL_BURROWER_SUBMERGE                       = 67322,
 };
 
 enum AnubEvents
@@ -660,6 +661,13 @@ public:
                 me->GetMotionMaster()->MoveChase(target);
                 events.DelayEvents(3000);
             }
+            if (spell->Id == SPELL_BURROWER_SUBMERGE) {
+                me->SetUnitFlag(UNIT_FLAG_NOT_SELECTABLE);
+                DoCastSelf(SPELL_CLEAR_ALL_DEBUFFS, true);
+                me->CastSpell(me, SPELL_SUBMERGE, false);
+                me->CastSpell(me, SPELL_EXPOSE_WEAKNESS, true);
+                me->CastSpell(me, SPELL_SPIDER_FRENZY, true);
+            }
         }
 
         void UpdateAI(uint32 diff) override
@@ -685,11 +693,7 @@ public:
                     if (HealthBelowPct(85) && !me->HasAura(RAID_MODE(66193, 67855, 67856, 67857))) // not having permafrost - allow submerge
                     {
                         me->GetMotionMaster()->MoveIdle();
-                        me->SetUnitFlag(UNIT_FLAG_NOT_SELECTABLE);
-                        DoCastSelf(SPELL_CLEAR_ALL_DEBUFFS, true);
-                        me->CastSpell(me, SPELL_EXPOSE_WEAKNESS, true);
-                        me->CastSpell(me, SPELL_SPIDER_FRENZY, true);
-                        me->CastSpell(me, SPELL_SUBMERGE, false);
+                        me->CastSpell(me, SPELL_BURROWER_SUBMERGE, false);
 
                         events.DelayEvents(15s);
                         events.RescheduleEvent(EVENT_EMERGE, 10s);
