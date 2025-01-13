@@ -1048,6 +1048,9 @@ void AuraEffect::UpdatePeriodic(Unit* caster)
 
 float AuraEffect::CalcPeriodicCritChance(Unit const* caster, Unit const* target) const
 {
+    if (GetSpellInfo()->Id == 55078 || GetSpellInfo()->Id == 55095) {
+        LOG_ERROR("spells.aura", "AuraEffect::Spell {} Trigger", GetSpellInfo()->Id);
+    }
     float critChance = 0.0f;
     if (caster)
     {
@@ -1089,6 +1092,9 @@ bool AuraEffect::IsAffectedOnSpell(SpellInfo const* spell) const
 
     // Check EffectClassMask
     if (m_spellInfo->Effects[m_effIndex].SpellClassMask & spell->SpellFamilyFlags)
+        return true;
+    // fix ice plague has flag 0x4000800, not pass the check of effect class mask
+    if (m_spellInfo->Id == 67118 && spell->Id == 55095)
         return true;
     return false;
 }
