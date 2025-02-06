@@ -1801,7 +1801,7 @@ bool Group::SameSubGroup(Player const* member1, Player const* member2) const
 }
 
 // Allows setting sub groups both for online or offline members
-void Group::ChangeMembersGroup(ObjectGuid guid, uint8 group)
+void Group::ChangeMembersGroup(ObjectGuid guid, uint8 group, bool isSend)
 {
     // Only raid groups have sub groups
     if (!isRaidGroup())
@@ -1847,7 +1847,9 @@ void Group::ChangeMembersGroup(ObjectGuid guid, uint8 group)
     }
 
     // Broadcast the changes to the group
-    SendUpdate();
+    if (isSend) {
+        SendUpdate();
+    }
 }
 
 // Retrieve the next Round-Roubin player for the group

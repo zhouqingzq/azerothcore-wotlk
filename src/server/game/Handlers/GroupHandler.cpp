@@ -1179,6 +1179,6 @@ void WorldSession::HandleGroupSwapSubGroupOpcode(WorldPacket& recv_data)
         return;
     }
 
-    group->ChangeMembersGroup(guid1, groupId2);
+    group->ChangeMembersGroup(guid1, groupId2, false);
     group->ChangeMembersGroup(guid2, groupId1);
 }
