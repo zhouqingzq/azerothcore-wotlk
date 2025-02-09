@@ -151,7 +151,7 @@ struct boss_twin_valkyrAI : public ScriptedAI
                     uint32 essenceId1 = 0, empoweredId1 = 0, touchId1 = 0, essenceId2 = 0, empoweredId2 = 0, touchId2 = 0;
                     switch (me->GetMap()->GetDifficulty())
                     {
-			case RAID_DIFFICULTY_10MAN_NORMAL:
+                        case RAID_DIFFICULTY_10MAN_NORMAL:
                             essenceId1 = 65684;
                             empoweredId1 = 65724;
                             touchId1 = 65950;
@@ -402,10 +402,23 @@ struct boss_twin_valkyrAI : public ScriptedAI
                 break;
             case EVENT_SPECIAL:
                 {
-                    uint8 s;
-                    do s = urand(0, 3);
-                    while( SpecialMask & (1 << s) && (SpecialMask & 0xF) != 0xF );
-                    SpecialMask |= (1 << s);
+                    uint8 s = 3;
+                    if (SpecialMask == 0) {
+                        s = 3;
+                        SpecialMask = 1;
+                    } else if (SpecialMask == 1) {
+                        s = 2;
+                        SpecialMask = 2;
+                    } else if (SpecialMask == 2) {
+                        s = 1;
+                        SpecialMask = 3;
+                    } else if (SpecialMask == 3) {
+                        s = 0;
+                        SpecialMask = 4;
+                    } else if (SpecialMask == 4) {
+                        s = 3;
+                        SpecialMask = 1;
+                    }
                     switch (s)
                     {
                         case 0: // light vortex
@@ -447,8 +460,6 @@ struct boss_twin_valkyrAI : public ScriptedAI
                             }
                             break;
                     }
-                    if ((SpecialMask & 0xF) == 0xF )
-                        SpecialMask = 0;
                     events.Repeat(45s);
                     events.DelayEventsToMax(15000, 1); // no touch of light/darkness during special abilities!
                 }
